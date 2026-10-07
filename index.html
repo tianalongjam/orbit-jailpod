@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orbit — Tiana Longjam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F2F4F8; --surface:#FFFFFF; --surf2:#F0F3F7; --surf3:#E8ECF3;
+  --border:#DDE3EE; --border-d:#EAF0F8;
+  --accent:#2A5CE7; --accent-h:#1F4BD4; --accent-bg:#EBF0FF;
+  --text1:#0F1523; --text2:#5A6478; --text3:#9AA5BC;
+  --green:#0EA472; --green-bg:#E8FAF4;
+  --amber:#D4920E; --amber-bg:#FEF6E0;
+  --red:#E0373A; --red-bg:#FEF0F0;
+  --purple:#7B5CF5; --purple-bg:#F3F0FF;
+  --r-s:8px; --r-m:12px; --r-l:16px;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1117; --surface:#161B27; --surf2:#1C2333; --surf3:#222A3D;
+    --border:#2A3450; --border-d:#1F2A42;
+    --text1:#E8EDF8; --text2:#8A95AD; --text3:#4A5570;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1117; --surface:#161B27; --surf2:#1C2333; --surf3:#222A3D;
+  --border:#2A3450; --border-d:#1F2A42;
+  --text1:#E8EDF8; --text2:#8A95AD; --text3:#4A5570;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text1);font-size:14px}
+a{color:inherit}
+.app{display:flex;min-height:100vh}
+.side{width:220px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:18px 12px;display:flex;flex-direction:column;gap:2px}
+.brand{display:flex;align-items:center;gap:8px;padding:6px 8px 18px}
+.brand-mark{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#7B5CF5);flex-shrink:0}
+.brand-t{font-weight:800;font-size:15px}
+.nav-i{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--r-s);color:var(--text2);font-weight:600;font-size:13px;cursor:pointer;position:relative}
+.nav-i:hover{background:var(--surf2);color:var(--text1)}
+.nav-i.act{background:var(--accent-bg);color:var(--accent)}
+.nav-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:10px}
+.nav-i.act .nav-badge{background:var(--accent)}
+.side-foot{margin-top:auto;padding:10px 8px;border-top:1px solid var(--border-d);font-size:11.5px;color:var(--text3)}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);background:var(--surface)}
+.topbar-l{display:flex;flex-direction:column}
+.topbar-t{font-weight:700;font-size:16px}
+.topbar-sub{font-size:12px;color:var(--text3)}
+.topbar-r{display:flex;align-items:center;gap:10px}
+.ref-btn{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--text2);background:var(--surf2);border:1px solid var(--border);padding:6px 12px;border-radius:20px;cursor:pointer}
+.ref-btn:hover{background:var(--surf3)}
+.spinning{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12.5px}
+.cnt{padding:22px 24px;max-width:1180px}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:14px;flex-wrap:wrap}
+.ph-t{font-size:19px;font-weight:800}
+.ph-sub{font-size:12.5px;color:var(--text3);margin-top:2px}
+.btn{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text1);cursor:pointer}
+.btn-p{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-p:hover{background:var(--accent-h)}
+.btn-s:hover{background:var(--surf2)}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-l);padding:16px}
+.sv{font-size:24px;font-weight:800}
+.sl{font-size:12px;color:var(--text3);margin-top:2px}
+
+#overviewGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.wgt{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-l);overflow:hidden}
+.wb{padding:16px}
+.wgt-h{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 0}
+.wgt-t{font-size:13px;font-weight:700}
+.wcard-ctx{margin-top:6px;font-size:11.5px;color:var(--text2);background:var(--surf2);padding:8px 10px;border-radius:8px;line-height:1.5}
+
+.tl{display:flex;flex-direction:column;gap:2px}
+.ti{display:flex;gap:10px;padding:9px 4px;border-radius:8px;cursor:pointer}
+.ti:hover{background:var(--surf2)}
+.tcb{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center}
+.tcb.done{background:var(--green);border-color:var(--green)}
+.tck{color:transparent}
+.ti.dn .tcb .tck,.tcb.done .tck{color:#fff}
+.tc{flex:1;min-width:0}
+.ttxt{font-size:13px;font-weight:500}
+.tm{display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap}
+.ttime{font-size:11px;color:var(--text3)}
+.add-t{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text3);padding:8px 4px;cursor:pointer}
+.add-t:hover{color:var(--accent)}
+
+.tag{display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:20px;white-space:nowrap}
+.tag.bl{background:var(--accent-bg);color:var(--accent)}
+.tag.gn{background:var(--green-bg);color:var(--green)}
+.tag.am{background:var(--amber-bg);color:var(--amber)}
+.tag.rd{background:var(--red-bg);color:var(--red)}
+.tag.pu{background:var(--purple-bg);color:var(--purple)}
+.tag.gy{background:var(--surf2);color:var(--text2)}
+
+.pg-filters{display:flex;gap:8px}
+.flt{font-size:12px;font-weight:600;padding:6px 13px;border-radius:20px;background:var(--surf2);color:var(--text2);cursor:pointer}
+.flt.act{background:var(--accent);color:#fff}
+
+.task-view-tabs{display:flex;gap:6px;border-bottom:1px solid var(--border);margin-bottom:14px}
+.tvt{padding:8px 14px;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .12s,border-color .12s}
+.tvt.act{color:var(--accent);border-bottom-color:var(--accent)}
+.tvt:hover:not(.act){color:var(--text1)}
+
+.log-table{width:100%;border-collapse:collapse;font-size:13px}
+.log-table th{text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);padding:8px 12px;border-bottom:1px solid var(--border)}
+.log-table td{padding:10px 12px;border-bottom:1px solid var(--border-d);vertical-align:middle}
+.log-table tr:last-child td{border-bottom:none}
+.log-table tr:hover td{background:var(--surf2)}
+.restore-btn{font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;white-space:nowrap;transition:background .12s,color .12s}
+.restore-btn:hover{background:var(--green-bg);color:var(--green);border-color:var(--green)}
+
+.sug-card{background:var(--surface);border:1px dashed var(--border);border-radius:var(--r-l);padding:14px 16px;margin-bottom:12px}
+.sug-top{display:flex;gap:10px;align-items:flex-start}
+.sug-ico{width:30px;height:30px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px}
+.sug-t{font-size:13px;font-weight:700}
+.sug-d{font-size:12px;color:var(--text2);margin-top:2px}
+.sug-actions{display:flex;gap:6px;margin-top:8px}
+.sug-btn{font-size:12px;font-weight:600;padding:5px 10px;border-radius:20px;cursor:pointer;border:1px solid var(--border);background:var(--surf2);color:var(--text2);transition:background .1s}
+.sug-btn.p{background:var(--accent-bg);color:var(--accent);border-color:transparent}
+.sug-btn.p:hover{background:var(--accent);color:#fff}
+
+.wgt[draggable="true"]{cursor:grab}
+.wgt[draggable="true"]:active{cursor:grabbing}
+.wgt.drag-over{border-color:var(--accent);background:var(--accent-bg)}
+.wgt.dragging{opacity:.4}
+
+.wk-row{display:grid;grid-template-columns:70px repeat(7,1fr);gap:6px}
+.wk-day{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-m);padding:8px;min-height:100px}
+.wk-day-h{font-size:11px;font-weight:700;color:var(--text3);margin-bottom:6px;text-transform:uppercase}
+.wk-ev{background:var(--accent-bg);color:var(--accent);font-size:11px;font-weight:600;padding:4px 6px;border-radius:6px;margin-bottom:4px;line-height:1.35}
+.free-block{background:var(--green-bg);color:var(--green);font-size:11px;font-weight:600;padding:4px 6px;border-radius:6px;margin-bottom:4px}
+
+.empty-st{text-align:center;padding:40px 20px;color:var(--text3)}
+.empty-st-i{font-size:30px;margin-bottom:8px}
+.empty-st-t{font-size:13.5px;font-weight:700;color:var(--text2)}
+.empty-st-d{font-size:12px;margin-top:4px}
+
+.modal-wrap{position:fixed;inset:0;background:rgba(10,14,25,.45);display:flex;align-items:center;justify-content:center;z-index:50}
+.modal-wrap.dn{display:none}
+.modal{background:var(--surface);border-radius:var(--r-l);width:420px;max-width:92vw;border:1px solid var(--border)}
+.mhd{display:flex;align-items:center;gap:8px;padding:16px 18px;border-bottom:1px solid var(--border-d)}
+.mhd-t{font-weight:700;font-size:14.5px;flex:1}
+.wib{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text3)}
+.wib:hover{background:var(--surf2);color:var(--text1)}
+.mbd{padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.mft label{display:block;font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:5px}
+.mft input,.mft select,.mft textarea{width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text1);font-family:inherit;font-size:13px}
+.mft textarea{resize:vertical;min-height:56px}
+.mft-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mft-slot{display:flex;gap:6px;flex-wrap:wrap}
+.slot-btn{font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:20px;border:1px solid var(--border);background:var(--surf2);color:var(--text2);cursor:pointer}
+.slot-btn.sel{background:var(--accent);color:#fff;border-color:var(--accent)}
+.mft-row2{display:flex;justify-content:flex-end;gap:8px;padding:14px 18px;border-top:1px solid var(--border-d)}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text1);color:var(--bg);font-size:12.5px;font-weight:500;padding:10px 18px;border-radius:20px;z-index:100;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+
+.chat-panel{position:fixed;right:20px;bottom:20px;width:340px;max-height:460px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-l);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 12px 30px rgba(20,25,40,.18);z-index:40}
+.chat-panel.dn{display:none}
+.chat-hd{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--border-d);font-weight:700;font-size:13px}
+.chat-body{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-height:180px}
+.chat-msg{max-width:85%;font-size:12.5px;padding:8px 11px;border-radius:12px;line-height:1.45}
+.chat-msg.bot{background:var(--surf2);align-self:flex-start}
+.chat-msg.usr{background:var(--accent);color:#fff;align-self:flex-end}
+.chat-inp{display:flex;gap:6px;padding:10px;border-top:1px solid var(--border-d)}
+.chat-inp input{flex:1;border:1px solid var(--border);background:var(--bg);color:var(--text1);border-radius:20px;padding:8px 12px;font-size:12.5px;font-family:inherit}
+.chat-fab{position:fixed;right:20px;bottom:20px;width:48px;height:48px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 20px rgba(42,92,231,.35);z-index:39}
+
+@media(max-width:860px){
+  .side{display:none}
+  #overviewGrid{grid-template-columns:1fr}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .wk-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="ic-plus" viewBox="0 0 16 16"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="ic-check" viewBox="0 0 10 8"><path d="M1 4l3 3 5-6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="ic-close" viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+    <symbol id="ic-refresh" viewBox="0 0 16 16"><path d="M13 3v4h-4M3 13v-4h4M3.5 6.5A5.5 5.5 0 0113 5M12.5 9.5A5.5 5.5 0 013 11" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="app">
+  <div class="side">
+    <div class="brand"><div class="brand-mark"></div><div class="brand-t">Orbit</div></div>
+    <div class="nav-i act" data-pg="overview" onclick="navigate('overview')">Overview</div>
+    <div class="nav-i" data-pg="tasks" onclick="navigate('tasks')">My Tasks<span class="nav-badge" id="navBadgeTasks">6</span></div>
+    <div class="nav-i" data-pg="calendar" onclick="navigate('calendar')">Calendar</div>
+    <div class="nav-i" data-pg="wrike" onclick="navigate('wrike')">Wrike</div>
+    <div class="nav-i" data-pg="teams" onclick="navigate('teams')">Teams</div>
+    <div class="nav-i" data-pg="campaigns" onclick="navigate('campaigns')">Campaigns</div>
+    <div class="side-foot">Read-only snapshot.<br>Re-run <code>/orbit</code> to refresh.</div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-l">
+        <div class="topbar-t" id="topbarTitle">Overview</div>
+        <div class="topbar-sub" id="topbarSub">Tuesday, September 22</div>
+      </div>
+      <div class="topbar-r">
+        <div class="ref-btn" onclick="refreshDash()"><svg width="12" height="12" id="refIco"><use href="#ic-refresh"/></svg>Refresh</div>
+        <div class="avatar" id="avatarInit">TL</div>
+      </div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="cnt" id="pg-overview">
+      <div class="stats-row">
+        <div class="stat"><div class="sv" id="taskCount">6</div><div class="sl">Tasks today</div></div>
+        <div class="stat"><div class="sv" id="rolledCount">0</div><div class="sl">Rolled over</div></div>
+        <div class="stat"><div class="sv">5</div><div class="sl">Teams mentions</div></div>
+        <div class="stat"><div class="sv">0</div><div class="sl">Meetings today</div></div>
+      </div>
+
+      <div id="adaptiveSuggestions"></div>
+
+      <div id="overviewGrid">
+        <div class="wgt" id="w-focus" draggable="true">
+          <div class="wgt-h"><div class="wgt-t">Today's Focus</div><span class="tag bl">6 open</span></div>
+          <div class="wb">
+            <div class="tl" id="taskList">
+              <div class="ti" data-tid="pod-role-split-ov" onclick="toggleTask(this)">
+                <div class="tcb"><svg width="8" height="8" class="tck"><use href="#ic-check"/></svg></div>
+                <div class="tc"><div class="ttxt">Confirm your role on the Group 15 innovation pod (providers &amp; tools)</div>
+                  <div class="tm"><span class="tag pu">Teams</span><span class="ttime">~30 min</span></div>
+                  <div class="wcard-ctx"><strong>From Teams · Aidan Costello · Sep 22</strong><br>"pick whichever ill take the other" — you offered to own providers/license &amp; tool assignment.</div>
+                </div>
+              </div>
+              <div class="ti" data-tid="update-corey-cole-ov" onclick="toggleTask(this)">
+                <div class="tcb"><svg width="8" height="8" class="tck"><use href="#ic-check"/></svg></div>
+                <div class="tc"><div class="ttxt">Update Corey &amp; Cole on what the pod will be working on</div>
+                  <div class="tm"><span class="tag pu">Teams</span><span class="ttime">~15 min</span></div>
+                  <div class="wcard-ctx"><strong>From Teams · you asked · Sep 22</strong><br>"should we update Corey and Cole on what we will be working on?" — no reply yet.</div>
+                </div>
+              </div>
+              <div class="ti" data-tid="ethics-training-ov" onclick="toggleTask(this)">
+                <div class="tcb"><svg width="8" height="8" class="tck"><use href="#ic-check"/></svg></div>
+                <div class="tc"><div class="ttxt">Complete "Code of Ethics &amp; Business Conduct 2026" e-learning</div>
+                  <div class="tm"><span class="tag am">Due Oct 21</span><span class="tag bl">Email</span></div>
+                </div>
+              </div>
+              <div class="ti" data-tid="conflict-training-ov" onclick="toggleTask(this)">
+                <div class="tcb"><svg width="8" height="8" class="tck"><use href="#ic-check"/></svg></div>
+                <div class="tc"><div class="ttxt">Complete "Conflict of Interest Training" e-learning</div>
+                  <div class="tm"><span class="tag am">Due Oct 5</span><span class="tag bl">Email</span></div>
+                </div>
+              </div>
+              <div class="ti" data-tid="bribery-training-ov" onclick="toggleTask(this)">
+                <div class="tcb"><svg width="8" height="8" class="tck"><use href="#ic-check"/></svg></div>
+                <div class="tc"><div class="ttxt">Complete "Anti-Bribery and Corruption Training (2026)"</div>
+                  <div class="tm"><span class="tag am">Due Oct 5</span><span class="tag bl">Email</span></div>
+                </div>
+              </div>
+              <div class="ti" data-tid="timesheet-ov" onclick="toggleTask(this)">
+                <div class="tcb"><svg width="8" height="8" class="tck"><use href="#ic-check"/></svg></div>
+                <div class="tc"><div class="ttxt">Submit timesheet for this pay period</div>
+                  <div class="tm"><span class="tag rd">Reminder</span><span class="tag bl">Email</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="wgt" id="w-schedule" draggable="true">
+          <div class="wgt-h"><div class="wgt-t">Upcoming</div><span class="tag gy">Next 7 days</span></div>
+          <div class="wb">
+            <div class="ti" style="cursor:default">
+              <div class="tc"><div class="ttxt">Jailbreak AI Innovation Pods (Group 15)</div>
+                <div class="tm"><span class="ttime">Wed, Sep 23 · 9:00 AM – 1:00 PM ET</span><span class="tag gy">Teams</span><span class="tag am">Tentative</span></div>
+              </div>
+            </div>
+            <div class="wcard-ctx" style="margin-top:8px">No other events on your calendar this week — today is wide open for focused work.</div>
+          </div>
+        </div>
+
+        <div class="wgt" id="w-email" draggable="true">
+          <div class="wgt-h"><div class="wgt-t">Email Digest</div><span class="tag gy">Last 24h</span></div>
+          <div class="wb">
+            <div class="ti" style="cursor:default"><div class="tc"><div class="ttxt">MCC Notification [OPEN]: Agiloft Outage</div><div class="tm"><span class="ttime">sharkninja.agiloft.com down · resolution TBD</span></div></div></div>
+            <div class="ti" style="cursor:default"><div class="tc"><div class="ttxt">3 required e-learning courses assigned</div><div class="tm"><span class="ttime">Ethics (Oct 21), Conflict of Interest &amp; Anti-Bribery (Oct 5)</span></div></div></div>
+            <div class="ti" style="cursor:default"><div class="tc"><div class="ttxt">Valeria Uzcategui &amp; Cole Morgan tried to reach you in Teams</div><div class="tm"><span class="ttime">Missed-activity notifications</span></div></div></div>
+          </div>
+        </div>
+
+        <div class="wgt" id="w-teams" draggable="true">
+          <div class="wgt-h"><div class="wgt-t">Teams Digest</div><span class="tag gy">Recent</span></div>
+          <div class="wb">
+            <div class="ti" style="cursor:default"><div class="tc"><div class="ttxt">Gabrielle Goldstein mentioned you</div><div class="tm"><span class="ttime">Sep 22, 1:40 PM</span></div></div></div>
+            <div class="ti" style="cursor:default"><div class="tc"><div class="ttxt">Alex Gilliland: innovation pods group sheet updated — confirm your group</div><div class="tm"><span class="ttime">Sep 22, 1:06 PM</span></div></div></div>
+            <div class="ti" style="cursor:default"><div class="tc"><div class="ttxt">Corey Hudson: implementation timeline is "best effort", not guaranteed</div><div class="tm"><span class="ttime">Sep 22, 11:08 AM</span></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MY TASKS -->
+    <div class="cnt" id="pg-tasks" style="display:none">
+      <div class="ph">
+        <div>
+          <div class="ph-t">My Tasks</div>
+          <div class="ph-sub">Tue, Sep 22 · 6 active · 0 done · all from Teams &amp; Email</div>
+        </div>
+        <div class="task-view-tabs">
+          <span class="tvt act" id="activeTasksBtn" onclick="switchTaskView('active')">Active Tasks</span>
+          <span class="tvt" id="completedLogBtn" onclick="switchTaskView('log')">Completed Log</span>
+        </div>
+        <button class="btn btn-p" onclick="openModal()"><svg width="12" height="12"><use href="#ic-plus"/></svg> New Task</button>
+      </div>
+
+      <div id="activeTasksView">
+        <div class="pg-filters" style="margin-bottom:12px">
+          <span class="flt act" onclick="filterTasks(this,'all')">All</span>
+          <span class="flt" onclick="filterTasks(this,'pending')">Pending</span>
+          <span class="flt" onclick="filterTasks(this,'done')">Done</span>
+          <span class="flt" onclick="filterTasks(this,'overdue')">Rolled Over</span>
+        </div>
+
+        <div data-group="rolled">
+          <div style="font-size:11px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px">↺ Rolled Over · 0 tasks</div>
+          <div class="wgt"><div class="wb"><div class="tl"></div></div></div>
+        </div>
+
+        <div data-group="today" style="margin-top:16px">
+          <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px">Today · Sep 22</div>
+          <div class="wgt"><div class="wb">
+            <div class="tl" id="todayTaskList">
+              <div class="ti" data-tid="pod-role-split" onclick="toggleTask(this)">
+                <div class="tcb"><svg width="8" height="8" class="tck"><use href="#ic-check"/></svg></div>
+                <div class="tc">
+                  <div class="ttxt">Confirm your role on the Group 15 innovation pod (providers &amp; tools)</div>
+                  <div class="tm"><span class="tag pu">Teams</span><span class="ttime">~30 min</span></div>
+                  <div class="wcard-ctx"><strong>From Teams · Aidan Costello · Sep 22</strong><br>"pick whichever ill take the other" — you offered to own providers/license &amp; tool assignment.</div>
+                </div>
+              </div>
+              <div class="ti" data-tid="update-corey-cole" onclick="toggleTask(this)">
+                <div class="tcb"><svg width="8" height="8" class="tck"><use href="#ic-check"/></svg></div>
+                <div class="tc">
+                  <div class="ttxt">Update Corey &amp; Cole on what the pod will be working on</div>
+                  <div class="tm"><span class="tag pu">Teams</span><span class="ttime">~15 min</span></div>
+                  <div class="wcard-ctx"><strong>From Teams · you asked · Sep 22</strong><br>"should we update Corey and Cole on what we will be working on?" — no reply yet.</div>
+                </div>
+              </div>
+              <div class="ti" data-tid="ethics-training" onclick="toggleTask(this)">
+                <div class="tcb"><svg width="8" height="8" class="tck"><use href="#ic-check"/></svg></div>
+                <div class="tc">
+                  <div class="ttxt">Complete "Code of Ethics &amp; Business Conduct 2026" e-learning</div>
+                  <div class="tm"><span class="tag am">Due Oct 21</span><span class="tag bl">Email</span></div>
+                  <div class="wcard-ctx"><strong>From Email · SharkNinja University · Sep 22</strong><br>Course due 10/21/2026.</div>
+                </div>
+              </div>
+              <div class="ti" data-tid="conflict-training" onclick="toggleTask(this)">
+                <div class="tcb"><svg width="8" height="8" class="tck"><use href="#ic-check"/></svg></div>
+                <div class="tc">
+                  <div class="ttxt">Complete "Conflict of Interest Training" e-learning</div>
+                  <div class="tm"><span class="tag am">Due Oct 5</span><span class="tag bl">Email</span></div>
+                  <div class="wcard-ctx"><strong>From Email · SharkNinja University · Sep 21</strong><br>Course due 10/5/2026.</div>
+                </div>
+              </div>
+              <div class="ti" data-tid="bribery-training" onclick="toggleTask(this)">
+                <div class="tcb"><svg width="8" height="8" class="tck"><use href="#ic-check"/></svg></div>
+                <div class="tc">
+                  <div class="ttxt">Complete "Anti-Bribery and Corruption Training (2026)"</div>
+                  <div class="tm"><span class="tag am">Due Oct 5</span><span class="tag bl">Email</span></div>
+                  <div class="wcard-ctx"><strong>From Email · SharkNinja University · Sep 21</strong><br>Course due 10/5/2026.</div>
+                </div>
+              </div>
+              <div class="ti" data-tid="timesheet" onclick="toggleTask(this)">
+                <div class="tcb"><svg width="8" height="8" class="tck"><use href="#ic-check"/></svg></div>
+                <div class="tc">
+                  <div class="ttxt">Submit timesheet for this pay period</div>
+                  <div class="tm"><span class="tag rd">Reminder</span><span class="tag bl">Email</span></div>
+                  <div class="wcard-ctx"><strong>From Email · UltiPro · Sep 18</strong><br>"You have NOT submitted your timesheet for this pay period."</div>
+                </div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div data-group="done" style="margin-top:16px">
+          <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px">Done</div>
+          <div class="wgt"><div class="wb"><div class="tl"></div></div></div>
+        </div>
+
+        <div class="add-t" onclick="openModal()"><svg width="13" height="13"><use href="#ic-plus"/></svg> Add a task…</div>
+      </div>
+
+      <div id="completedLogView" style="display:none">
+        <div style="font-size:12px;color:var(--text3);margin-bottom:14px">Tasks you check off are logged here with a timestamp. Click Restore to move a task back to active.</div>
+        <div class="wgt" style="overflow:hidden">
+          <table class="log-table">
+            <thead><tr><th>Task</th><th>Source</th><th>From</th><th>Completed</th><th></th></tr></thead>
+            <tbody id="completedLogTable">
+              <tr><td colspan="5" style="text-align:center;padding:28px;color:var(--text3);font-size:13px">No completed tasks yet — check one off to track it here.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALENDAR -->
+    <div class="cnt" id="pg-calendar" style="display:none">
+      <div class="ph"><div><div class="ph-t">Calendar</div><div class="ph-sub">Week of Sep 22 – Sep 28</div></div></div>
+      <div class="wk-row">
+        <div class="wk-day"><div class="wk-day-h">Time</div></div>
+        <div class="wk-day"><div class="wk-day-h">Tue 22</div><div class="free-block">All day free</div></div>
+        <div class="wk-day"><div class="wk-day-h">Wed 23</div><div class="wk-ev">Jailbreak AI Innovation Pods (Group 15)<br>9:00 AM–1:00 PM · Teams</div></div>
+        <div class="wk-day"><div class="wk-day-h">Thu 24</div><div class="free-block">All day free</div></div>
+        <div class="wk-day"><div class="wk-day-h">Fri 25</div><div class="free-block">All day free</div></div>
+        <div class="wk-day"><div class="wk-day-h">Sat 26</div></div>
+        <div class="wk-day"><div class="wk-day-h">Sun 27</div></div>
+        <div class="wk-day"><div class="wk-day-h">Mon 28</div><div class="free-block">All day free</div></div>
+      </div>
+      <div class="wcard-ctx" style="margin-top:14px">Only one event found in the next 7 days. The rest of the week reads as open — good stretch for the pod work and outstanding trainings.</div>
+    </div>
+
+    <!-- WRIKE -->
+    <div class="cnt" id="pg-wrike" style="display:none">
+      <div class="ph"><div><div class="ph-t">Wrike</div><div class="ph-sub">Tasks assigned to you</div></div></div>
+      <div class="wgt"><div class="empty-st">
+        <div class="empty-st-i">📋</div>
+        <div class="empty-st-t">No Wrike connection in this session</div>
+        <div class="empty-st-d">Connect the Wrike MCP and re-run <code>/orbit</code> to pull tasks assigned to you here.</div>
+      </div></div>
+    </div>
+
+    <!-- TEAMS -->
+    <div class="cnt" id="pg-teams" style="display:none">
+      <div class="ph"><div><div class="ph-t">Teams</div><div class="ph-sub">Recent @mentions &amp; action items</div></div></div>
+      <div class="wgt"><div class="wb">
+        <div class="ti" style="cursor:default"><div class="tc"><div class="ttxt">Gabrielle Goldstein mentioned you</div><div class="tm"><span class="ttime">Sep 22, 1:40 PM</span></div></div></div>
+        <div class="ti" style="cursor:default"><div class="tc"><div class="ttxt">Aidan Costello — pod role split ("pick whichever ill take the other")</div><div class="tm"><span class="ttime">Sep 22, 1:36 PM</span><span class="tag am">Action needed</span></div></div></div>
+        <div class="ti" style="cursor:default"><div class="tc"><div class="ttxt">You asked: "should we update Corey and Cole on what we will be working on?"</div><div class="tm"><span class="ttime">Sep 22, 1:27 PM</span><span class="tag am">Awaiting reply</span></div></div></div>
+        <div class="ti" style="cursor:default"><div class="tc"><div class="ttxt">Alex Gilliland — innovation pods group sheet updated, confirm your group</div><div class="tm"><span class="ttime">Sep 22, 1:06 PM</span></div></div></div>
+        <div class="ti" style="cursor:default"><div class="tc"><div class="ttxt">Corey Hudson — implementation timeline is best-effort, not guaranteed</div><div class="tm"><span class="ttime">Sep 22, 11:08 AM</span></div></div></div>
+      </div></div>
+    </div>
+
+    <!-- CAMPAIGNS -->
+    <div class="cnt" id="pg-campaigns" style="display:none">
+      <div class="ph"><div><div class="ph-t">Campaigns</div><div class="ph-sub">Syndication &amp; platform tracking</div></div></div>
+      <div class="wgt"><div class="empty-st">
+        <div class="empty-st-i">📣</div>
+        <div class="empty-st-t">No campaign or syndication activity detected</div>
+        <div class="empty-st-d">Nothing in your recent email or Teams mentions bazaarvoice, syndication, or platform tracking.</div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<div class="chat-fab" id="chatFab" onclick="toggleChat()">💬</div>
+<div class="chat-panel dn" id="chatPanel">
+  <div class="chat-hd">Ask Orbit <span style="margin-left:auto;cursor:pointer;color:var(--text3)" onclick="toggleChat()">✕</span></div>
+  <div class="chat-body" id="chatBody">
+    <div class="chat-msg bot">Hi Tiana — ask me about your tasks, meetings, or Teams activity. Try "what's on my plate today?"</div>
+  </div>
+  <div class="chat-inp"><input id="chatInput" placeholder="Ask about your day…" onkeydown="if(event.key==='Enter')sendChat()"><button class="btn btn-p" style="padding:8px 12px" onclick="sendChat()">Go</button></div>
+</div>
+
+<div class="modal-wrap dn" id="taskModal">
+  <div class="modal">
+    <div class="mhd"><svg width="16" height="16" style="color:var(--accent)"><use href="#ic-plus"/></svg><span class="mhd-t">New Task</span><div class="wib" onclick="closeModal()"><svg width="15" height="15"><use href="#ic-close"/></svg></div></div>
+    <div class="mbd">
+      <div class="mft"><label>Task title</label><input type="text" id="mt-title" placeholder="e.g. Review campaign brief…"></div>
+      <div class="mft-row">
+        <div class="mft"><label>Due date</label><input type="date" id="mt-date" value="2026-09-22"></div>
+        <div class="mft"><label>Estimated time</label>
+          <select id="mt-dur"><option>15 min</option><option>30 min</option><option selected>1 hour</option><option>1.5 hours</option><option>2 hours</option><option>Half day</option></select>
+        </div>
+      </div>
+      <div class="mft"><label>Source / context (optional)</label><textarea id="mt-ctx" placeholder="e.g. From Teams — asked for review…"></textarea></div>
+      <div class="mfree-slots">
+        <label style="display:block;font-size:11.5px;font-weight:700;color:var(--text2);margin-bottom:5px">Free blocks today</label>
+        <div class="mft-slot">
+          <button class="slot-btn sel" onclick="selectSlot(this)">10:00 AM – 12:00 PM</button>
+          <button class="slot-btn" onclick="selectSlot(this)">1:00 PM – 4:00 PM</button>
+        </div>
+      </div>
+    </div>
+    <div class="mft-row2"><button class="btn btn-s" onclick="closeModal()">Cancel</button><button class="btn btn-p" onclick="addTaskFromModal()"><svg width="12" height="12"><use href="#ic-plus"/></svg> Add Task</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const LAST_FETCHED = '2026-09-22T18:00:00.000Z';
+const USER_NAME    = 'Tiana Longjam';
+const USER_INITIALS= 'TL';
+const USER_TITLE   = 'AI/Sharks Applied AI & Analytics Co-op';
+
+const userPatterns = {
+  emailTopics:     ['training','timesheet','network issue','agiloft outage','product testing','notion'],
+  teamsTopics:     ['innovation pod','dashboard','providers and tools','sop'],
+  calendarTypes:   ['innovation pod'],
+  taskSources:     ['teams','outlook'],
+  wrikeActive:     false,
+  docusignActive:  false,
+  salesforceActive:false,
+  heavyMeetings:   false,
+  hasRecurring1on1:false,
+  programRole:     'AI Sharks Early Talent Innovation Pods (Group 15)',
+};
+
+function showToast(msg,dur){
+  dur=dur||2600;
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(window._toastT); window._toastT=setTimeout(()=>t.classList.remove('show'),dur);
+}
+
+function navigate(page){
+  document.querySelectorAll('.cnt').forEach(c=>c.style.display='none');
+  const el=document.getElementById('pg-'+page); if(el) el.style.display='';
+  document.querySelectorAll('.nav-i').forEach(n=>n.classList.toggle('act', n.getAttribute('data-pg')===page));
+  const titles={overview:'Overview',tasks:'My Tasks',calendar:'Calendar',wrike:'Wrike',teams:'Teams',campaigns:'Campaigns'};
+  document.getElementById('topbarTitle').textContent=titles[page]||'Overview';
+  try{localStorage.setItem('orb-page',page);}catch(e){}
+}
+
+function restoreTheme(){}
+
+function refreshDash(){
+  const ico = document.getElementById('refIco');
+  if(ico){ ico.classList.add('spinning'); setTimeout(()=>ico.classList.remove('spinning'),1200); }
+  const d = new Date(LAST_FETCHED);
+  const ago = Math.round((Date.now()-d.getTime())/60000);
+  const msg = ago < 60
+    ? `Data is ${ago} min old. Re-run /orbit in Claude Code to fetch live updates.`
+    : `Last fetched ${d.toLocaleDateString()} at ${d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}. Re-run /orbit for fresh data.`;
+  showToast(msg, 4500);
+}
+
+function getCompletedTasks(){ try{ return JSON.parse(localStorage.getItem('orb-completed')||'[]'); }catch(e){ return []; } }
+function saveCompletedTask(task){ const tasks=getCompletedTasks(); const idx=tasks.findIndex(t=>t.id===task.id); if(idx>=0)tasks[idx]=task; else tasks.unshift(task); try{localStorage.setItem('orb-completed',JSON.stringify(tasks));}catch(e){} }
+function removeCompletedTask(id){ try{localStorage.setItem('orb-completed',JSON.stringify(getCompletedTasks().filter(t=>t.id!==id)));}catch(e){} }
+
+function updateDoneCounter(){
+  const all=document.querySelectorAll('#activeTasksView .ti[data-tid]');
+  const done=document.querySelectorAll('#activeTasksView .ti.dn[data-tid]');
+  const active=all.length-done.length;
+  const tc=document.getElementById('taskCount'); if(tc) tc.textContent=active;
+  const rc=document.getElementById('rolledCount'); if(rc) rc.textContent=document.querySelectorAll('[data-group="rolled"] .ti:not(.dn)').length;
+  const btn=document.getElementById('completedLogBtn'); const ct=getCompletedTasks().length;
+  if(btn) btn.textContent=ct?`Completed Log (${ct})`:'Completed Log';
+  const nb=document.getElementById('navBadgeTasks'); if(nb) nb.textContent=active;
+  const sub=document.querySelector('#pg-tasks .ph-sub'); if(sub) sub.textContent=`Tue, Sep 22 · ${active} active · ${done.length} done · all from Teams & Email`;
+}
+
+function toggleTask(el){
+  const wasDone=el.classList.contains('dn'); el.classList.toggle('dn');
+  const tid=el.getAttribute('data-tid');
+  if(!wasDone){
+    const title=(el.querySelector('.ttxt')?.textContent||'').trim();
+    const tags=[...el.querySelectorAll('.tag')].map(t=>t.textContent.trim());
+    const source=tags.find(t=>['Teams','Email','Wrike','Calendar'].includes(t))||'Task';
+    const fromEl=el.querySelector('.wcard-ctx strong');
+    const fromRaw=fromEl?fromEl.textContent.replace(/^From (Teams|Email|Wrike|Calendar) · /,'').split(' · ')[0]:'';
+    saveCompletedTask({id:tid,title,source,from:fromRaw,completedAt:new Date().toISOString()});
+  } else { removeCompletedTask(tid); }
+  document.querySelectorAll('[data-tid="'+tid+'-ov"]').forEach(o=>o.classList.toggle('dn', el.classList.contains('dn')));
+  renderCompletedLog(); updateDoneCounter();
+}
+
+function renderCompletedLog(){
+  const tbody=document.getElementById('completedLogTable'); if(!tbody) return;
+  const tasks=getCompletedTasks();
+  if(!tasks.length){ tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:28px;color:var(--text3);font-size:13px">No completed tasks yet — check one off to track it here.</td></tr>'; return; }
+  tbody.innerHTML=tasks.map(t=>{
+    const d=new Date(t.completedAt);
+    const when=d.toLocaleDateString([],{month:'short',day:'numeric'})+' · '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    const srcCls={Teams:'pu',Email:'bl',Wrike:'gn',Calendar:'gy'}[t.source]||'gy';
+    const safeTitle=t.title.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const safeFrom=(t.from||'—').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    const safeId=t.id.replace(/'/g,"\\'");
+    return `<tr><td style="font-size:13px;font-weight:500;color:var(--text1);max-width:240px">${safeTitle}</td><td><span class="tag ${srcCls}">${t.source}</span></td><td style="font-size:12px;color:var(--text2)">${safeFrom}</td><td style="font-size:11.5px;color:var(--text3);white-space:nowrap">${when}</td><td><button class="restore-btn" onclick="restoreTask('${safeId}')">↺ Restore</button></td></tr>`;
+  }).join('');
+}
+
+function restoreTask(id){ const el=document.querySelector('[data-tid="'+id+'"]'); if(el)el.classList.remove('dn'); document.querySelectorAll('[data-tid="'+id+'-ov"]').forEach(o=>o.classList.remove('dn')); removeCompletedTask(id); renderCompletedLog(); updateDoneCounter(); showToast('Task restored to active.'); }
+
+function switchTaskView(view){
+  const active=document.getElementById('activeTasksView'); const log=document.getElementById('completedLogView');
+  const btnA=document.getElementById('activeTasksBtn'); const btnL=document.getElementById('completedLogBtn');
+  if(view==='active'){ active.style.display=''; log.style.display='none'; btnA.classList.add('act'); btnL.classList.remove('act'); }
+  else { active.style.display='none'; log.style.display=''; btnL.classList.add('act'); btnA.classList.remove('act'); renderCompletedLog(); }
+}
+
+function filterTasks(el,filter){
+  document.querySelectorAll('#activeTasksView .flt').forEach(f=>f.classList.remove('act')); el.classList.add('act');
+  const groups=document.querySelectorAll('#activeTasksView [data-group]'); const tasks=document.querySelectorAll('#activeTasksView .ti');
+  groups.forEach(g=>g.style.display=''); tasks.forEach(t=>t.style.display='');
+  if(filter==='pending'){ document.querySelector('[data-group="done"]').style.display='none'; tasks.forEach(t=>{if(t.classList.contains('dn'))t.style.display='none';}); }
+  else if(filter==='done'){ document.querySelector('[data-group="rolled"]').style.display='none'; document.querySelector('[data-group="today"]').style.display='none'; tasks.forEach(t=>{if(!t.classList.contains('dn'))t.style.display='none';}); }
+  else if(filter==='overdue'){ document.querySelector('[data-group="today"]').style.display='none'; document.querySelector('[data-group="done"]').style.display='none'; }
+}
+
+function openModal(){ document.getElementById('taskModal').classList.remove('dn'); setTimeout(()=>document.getElementById('mt-title')?.focus(),50); }
+function closeModal(){ document.getElementById('taskModal').classList.add('dn'); document.getElementById('mt-title').value=''; document.getElementById('mt-ctx').value=''; }
+function selectSlot(el){ document.querySelectorAll('.slot-btn').forEach(b=>b.classList.remove('sel')); el.classList.add('sel'); }
+
+function addTaskFromModal(){
+  const title=document.getElementById('mt-title').value.trim(); if(!title){document.getElementById('mt-title').focus();return;}
+  const ctx=document.getElementById('mt-ctx').value.trim(); const dur=document.getElementById('mt-dur').value;
+  const slot=document.querySelector('.slot-btn.sel')?.textContent?.split('·')[0]?.trim()||'';
+  const tid=title.toLowerCase().replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,'-').substring(0,32)+'-'+Date.now().toString(36);
+  const ctxLine=ctx?`<div class="wcard-ctx" style="margin-top:6px"><strong>Manual entry</strong><br>${ctx.replace(/&/g,'&amp;').replace(/</g,'&lt;').substring(0,120)}</div>`:'';
+  const html=`<div class="tcb"><svg width="8" height="8" class="tck" style="color:#fff"><use href="#ic-check"/></svg></div><div class="tc"><div class="ttxt">${title.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</div><div class="tm"><span class="tag gn">New</span><span class="ttime">${slot?slot+' · ':''}${dur}</span></div>${ctxLine}</div>`;
+  const todayList=document.getElementById('todayTaskList');
+  if(todayList){const item=document.createElement('div');item.className='ti';item.setAttribute('data-tid',tid);item.onclick=function(){toggleTask(this);};item.innerHTML=html;todayList.appendChild(item);}
+  const ovList=document.getElementById('taskList');
+  if(ovList){const item2=document.createElement('div');item2.className='ti';item2.setAttribute('data-tid',tid+'-ov');item2.onclick=function(){toggleTask(this);};item2.innerHTML=html;ovList.appendChild(item2);}
+  closeModal(); updateDoneCounter(); showToast('Task added to Today.');
+}
+
+function initTaskLog(){
+  document.querySelectorAll('#activeTasksView .ti').forEach(el=>{
+    if(el.querySelector('.tc') && !el.getAttribute('data-tid')){
+      const slug=(el.querySelector('.ttxt')?.textContent||'').trim().toLowerCase().replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,'-').substring(0,32);
+      el.setAttribute('data-tid',slug||('t'+Math.random().toString(36).substr(2,6)));
+    }
+  });
+  getCompletedTasks().forEach(t=>{ const el=document.querySelector('[data-tid="'+t.id+'"]'); if(el)el.classList.add('dn'); });
+  renderCompletedLog(); updateDoneCounter();
+}
+
+let dragged=null;
+function attachDrag(el){
+  el.addEventListener('dragstart',()=>{dragged=el;el.classList.add('dragging');});
+  el.addEventListener('dragend',()=>{dragged=null;el.classList.remove('dragging');document.querySelectorAll('.wgt').forEach(w=>w.classList.remove('drag-over'));});
+  el.addEventListener('dragover',e=>{e.preventDefault();if(el!==dragged)el.classList.add('drag-over');});
+  el.addEventListener('dragleave',()=>el.classList.remove('drag-over'));
+  el.addEventListener('drop',e=>{ e.preventDefault();el.classList.remove('drag-over'); if(dragged&&dragged!==el){ const p=el.parentNode; const nodes=[...p.children]; const di=nodes.indexOf(dragged),ti=nodes.indexOf(el); if(di<ti)p.insertBefore(dragged,el.nextSibling); else p.insertBefore(dragged,el); saveGridOrder(); } });
+}
+function initDragDrop(){ document.querySelectorAll('#overviewGrid .wgt[draggable="true"]').forEach(el=>attachDrag(el)); }
+function saveGridOrder(){ const ids=[...document.querySelectorAll('#overviewGrid .wgt')].map(w=>w.id).filter(Boolean); try{localStorage.setItem('orb-grid-order',JSON.stringify(ids));}catch(e){} }
+function restoreGridOrder(){ try{ const ids=JSON.parse(localStorage.getItem('orb-grid-order')||'[]'); if(!ids.length)return; const grid=document.getElementById('overviewGrid'); if(!grid)return; ids.forEach(id=>{const el=document.getElementById(id);if(el)grid.appendChild(el);}); }catch(e){} }
+
+const ADAPTIVE_RULES = [
+  { id:'sop-reminder', detect:p=>p.teamsTopics.includes('sop'), ico:'📎', clr:'am',
+    title:'SOP mentioned in your pod meeting invite',
+    desc:'The Group 15 calendar invite references an "Sop" line item — worth confirming what it refers to before Wednesday.',
+    build(){ const d=document.createElement('div'); d.className='wgt'; d.draggable=true; d.id='w-sop-'+Date.now();
+      d.innerHTML='<div class="wgt-h"><div class="wgt-t">SOP Reminder</div></div><div class="wb"><div class="wcard-ctx">Check the Group 15 invite for the "Sop" reference before your Wed 9am session.</div></div>'; return d; } },
+  { id:'wrike-empty', detect:p=>!p.wrikeActive, ico:'📋', clr:'gy',
+    title:'No Wrike tasks found',
+    desc:'Either nothing is assigned to you in Wrike right now, or the Wrike connector isn\'t available in this session.',
+    build(){ const d=document.createElement('div'); d.className='wgt'; d.draggable=true; d.id='w-wrike-'+Date.now();
+      d.innerHTML='<div class="wgt-h"><div class="wgt-t">Wrike</div></div><div class="wb"><div class="wcard-ctx">No active Wrike tasks assigned to you.</div></div>'; return d; } },
+  { id:'dashboard-links', detect:p=>p.teamsTopics.includes('dashboard'), ico:'📊', clr:'bl',
+    title:'Pod project is a dashboard build',
+    desc:'Your Group 15 pod is building a content/trend/sentiment/seeding dashboard — you offered to own providers & tools.',
+    build(){ const d=document.createElement('div'); d.className='wgt'; d.draggable=true; d.id='w-dash-'+Date.now();
+      d.innerHTML='<div class="wgt-h"><div class="wgt-t">Pod Project Tracker</div></div><div class="wb"><div class="wcard-ctx">Dashboard for content ideas, trend/sentiment monitoring, and seeding tracking. Your portion: providers & tool assignment.</div></div>'; return d; } },
+];
+
+function initAdaptive(){
+  const box=document.getElementById('adaptiveSuggestions'); if(!box) return;
+  let dismissed=[]; try{dismissed=JSON.parse(localStorage.getItem('orb-dismissed')||'[]');}catch(e){}
+  let added=[]; try{added=JSON.parse(localStorage.getItem('orb-added')||'[]');}catch(e){}
+  ADAPTIVE_RULES.forEach(rule=>{
+    if(!rule.detect(userPatterns)) return;
+    if(dismissed.includes(rule.id)) return;
+    if(added.includes(rule.id)){ const g=document.getElementById('overviewGrid'); if(g && !document.getElementById('w-'+rule.id)){ const node=rule.build(); node.id='w-'+rule.id; g.appendChild(node); attachDrag(node); } return; }
+    const card=document.createElement('div'); card.className='sug-card'; card.id='sug-'+rule.id;
+    card.innerHTML=`<div class="sug-top"><div class="sug-ico tag ${rule.clr}">${rule.ico}</div><div><div class="sug-t">${rule.title}</div><div class="sug-d">${rule.desc}</div>
+      <div class="sug-actions"><span class="sug-btn p" onclick="addWidget('${rule.id}')">+ Add to workspace</span><span class="sug-btn" onclick="dismissSuggestion('${rule.id}')">Dismiss</span></div></div></div>`;
+    box.appendChild(card);
+  });
+}
+function addWidget(id){
+  const rule=ADAPTIVE_RULES.find(r=>r.id===id); if(!rule) return;
+  const node=rule.build(); node.id='w-'+id;
+  document.getElementById('overviewGrid').appendChild(node); attachDrag(node); saveGridOrder();
+  const card=document.getElementById('sug-'+id); if(card) card.remove();
+  let added=[]; try{added=JSON.parse(localStorage.getItem('orb-added')||'[]');}catch(e){}
+  if(!added.includes(id)){ added.push(id); try{localStorage.setItem('orb-added',JSON.stringify(added));}catch(e){} }
+  showToast('Widget added to your workspace.');
+}
+function dismissSuggestion(id){
+  const card=document.getElementById('sug-'+id); if(card) card.remove();
+  let dismissed=[]; try{dismissed=JSON.parse(localStorage.getItem('orb-dismissed')||'[]');}catch(e){}
+  if(!dismissed.includes(id)){ dismissed.push(id); try{localStorage.setItem('orb-dismissed',JSON.stringify(dismissed));}catch(e){} }
+}
+
+function toggleChat(){ document.getElementById('chatPanel').classList.toggle('dn'); }
+function sendChat(){
+  const inp=document.getElementById('chatInput'); const q=inp.value.trim(); if(!q) return;
+  const body=document.getElementById('chatBody');
+  body.innerHTML+=`<div class="chat-msg usr">${q.replace(/</g,'&lt;')}</div>`;
+  const ql=q.toLowerCase();
+  let a="I can answer questions about today's tasks, this week's meetings, or recent Teams activity — try asking about one of those.";
+  if(ql.includes('today')||ql.includes('plate')||ql.includes('focus')){
+    a="Today: confirm your role on the Group 15 pod (providers & tools), update Corey & Cole on the pod's direction, and three e-learning courses are outstanding (Ethics due Oct 21, Conflict of Interest & Anti-Bribery due Oct 5). No meetings today — the pod session is tomorrow 9am–1pm ET.";
+  } else if(ql.includes('meeting')||ql.includes('calendar')||ql.includes('schedule')){
+    a="Only one meeting on your calendar this week: Jailbreak AI Innovation Pods (Group 15), Wed Sep 23, 9:00 AM–1:00 PM ET on Teams. The rest of the week is open.";
+  } else if(ql.includes('teams')||ql.includes('mention')){
+    a="Recent Teams activity: Gabrielle Goldstein mentioned you, Aidan Costello is waiting on the pod role split, and your question to update Corey & Cole hasn't been answered yet.";
+  } else if(ql.includes('wrike')){
+    a="No Wrike data — the Wrike connector isn't available in this session. Connect it and re-run /orbit to pull your assigned tasks.";
+  } else if(ql.includes('training')||ql.includes('learning')){
+    a="Three required e-learnings are outstanding: Code of Ethics & Business Conduct 2026 (due Oct 21), Conflict of Interest Training (due Oct 5), and Anti-Bribery and Corruption Training (due Oct 5).";
+  }
+  body.innerHTML+=`<div class="chat-msg bot">${a}</div>`;
+  body.scrollTop=body.scrollHeight; inp.value='';
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  restoreTheme();
+  initAdaptive();
+  restoreGridOrder();
+  initDragDrop();
+  initTaskLog();
+  try{navigate(localStorage.getItem('orb-page')||'overview');}catch(e){navigate('overview');}
+});
+</script>
+</body>
+</html>
